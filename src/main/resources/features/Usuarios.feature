@@ -1,7 +1,9 @@
 Feature: UsuárioTeste
 
   Scenario: Gostaria de cadastrar um usuário, depois edita-lo, buscar na lista e então excluir o mesmo.
-      Given Faco uma chamada na requisicao POST "/usuarios" com o body
+      Given Armazeno o email "fulano@qa.com" e a senha "teste" dentro de uma variavel
+       When Faco uma requisicao do tipo POST no endpoint "/login" com usuario da variavel
+        And Faco uma chamada na requisicao POST "/usuarios" com o body
             | nome          | Fulano da Silva    |
             | email         | beltrano@qa.com.br |
             | password      | teste              |
@@ -27,7 +29,9 @@ Feature: UsuárioTeste
         And A mensagem do campo "message" deve ser "Registro excluído com sucesso"
     
     Scenario: Gostaria de cadastrar um usuario com email já cadastrado.
-        Given Faco uma chamada na requisicao POST "/usuarios" com o body
+        Given Armazeno o email "fulano@qa.com" e a senha "teste" dentro de uma variavel
+         When Faco uma requisicao do tipo POST no endpoint "/login" com usuario da variavel
+          And Faco uma chamada na requisicao POST "/usuarios" com o body
               | nome          | Fulano da Silva    |
               | email         | fulano@qa.com      |
               | password      | teste              |

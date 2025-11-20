@@ -2,10 +2,9 @@ package br.desafio.steps;
 
 import br.desafio.config.BaseClient;
 import br.desafio.hooks.SetupHook;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.cucumber.datatable.DataTable;
-import io.cucumber.java.PendingException;
-import io.cucumber.java.en.And;
-import io.cucumber.java.en.When;
 import io.cucumber.java.pt.Dado;
 import io.cucumber.java.pt.E;
 import io.cucumber.java.pt.Então;
@@ -22,8 +21,6 @@ public class CommonSteps {
     public BaseClient baseClient;
     private Response response;
 
-    public String idUser;
-
     public CommonSteps(TestContext context){
         this.baseClient = new BaseClient(SetupHook.baseUrl);
         this.context = context;
@@ -35,10 +32,13 @@ public class CommonSteps {
     public void facoUmaChamadaNaRequisicaoPOSTComOBody(String endpoint, DataTable dataTable) {
         Map<String, String> bodyMap = dataTable.asMap(String.class, String.class);
 
-        System.out.println("Body enviado:");
-        System.out.println(bodyMap);
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode jsonBody = mapper.valueToTree(bodyMap);
 
-        response = baseClient.post(bodyMap, endpoint);
+        System.out.println("Body enviado:");
+        System.out.println(jsonBody);
+
+        response = baseClient.post(jsonBody, endpoint);
         context.setResponse(response);
 
         System.out.println(response.getBody().asPrettyString());
@@ -64,10 +64,13 @@ public class CommonSteps {
 
         Map<String, String> bodyMap = dataTable.asMap(String.class, String.class);
 
-        System.out.println("Body enviado:");
-        System.out.println(bodyMap);
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode jsonBody = mapper.valueToTree(bodyMap);
 
-        response = baseClient.put(bodyMap, endpoint);
+        System.out.println("Body enviado:");
+        System.out.println(jsonBody);
+
+        response = baseClient.put(jsonBody, endpoint);
 
         context.setResponse(response);
 

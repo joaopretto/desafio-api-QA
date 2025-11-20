@@ -16,5 +16,7 @@ public class LoginSteps {
         LoginPayload loginPayload = new LoginPayload(userEmail, userPassword);
 
         context.setPayload(loginPayload);
+
+        TestContext.set("loginPayload", loginPayload);
     }
 }
