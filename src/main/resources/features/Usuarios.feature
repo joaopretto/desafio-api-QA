@@ -28,13 +28,13 @@ Feature: UsuárioTeste
        Then A resposta deve ser 200
         And A mensagem do campo "message" deve ser "Registro excluído com sucesso"
     
-    Scenario: Gostaria de cadastrar um usuario com email já cadastrado.
-        Given Armazeno o email "fulano@qa.com" e a senha "teste" dentro de uma variavel
-         When Faco uma requisicao do tipo POST no endpoint "/login" com usuario da variavel
-          And Faco uma chamada na requisicao POST "/usuarios" com o body
-              | nome          | Fulano da Silva    |
-              | email         | fulano@qa.com      |
-              | password      | teste              |
-              | administrador | true               |
-         Then A resposta deve ser 400
-          And A mensagem do campo "message" deve ser "Este email já está sendo usado"
+  Scenario: Gostaria de cadastrar um usuario com email já cadastrado.
+      Given Armazeno o email "fulano@qa.com" e a senha "teste" dentro de uma variavel
+       When Faco uma requisicao do tipo POST no endpoint "/login" com usuario da variavel
+        And Faco uma chamada na requisicao POST "/usuarios" com o body
+            | nome          | Fulano da Silva    |
+            | email         | fulano@qa.com      |
+            | password      | teste              |
+            | administrador | true               |
+       Then A resposta deve ser 400
+        And A mensagem do campo "message" deve ser "Este email já está sendo usado"

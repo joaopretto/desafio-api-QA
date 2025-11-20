@@ -5,6 +5,8 @@ import br.desafio.hooks.SetupHook;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.cucumber.datatable.DataTable;
+import io.cucumber.java.PendingException;
+import io.cucumber.java.en.When;
 import io.cucumber.java.pt.Dado;
 import io.cucumber.java.pt.E;
 import io.cucumber.java.pt.Então;
@@ -12,6 +14,9 @@ import io.cucumber.java.pt.Quando;
 import io.restassured.response.Response;
 import br.desafio.utils.TestContext;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -105,6 +110,44 @@ public class CommonSteps {
         System.out.println(response.getBody().asPrettyString());
     }
 
+    @Quando("Faco uma chamada na requisicao POST {string} com o body de listagem de produtos")
+    public void facoUmaChamadaNaRequisicaoPOSTComOBodyDeListagemDeProdutos(String endpoint, DataTable dataTable) {
+        List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+        List<Map<String, Object>> listaDeProdutos = new ArrayList<>();
+
+        for(Map<String, String> row : rows){
+            Map<String, Object> produtoProcessado = new HashMap<>();
+
+            String idInput = row.get("idProduto");
+            Object idReal = TestContext.get(idInput);
+
+            if(idReal == null){
+                System.out.println("Usando ID literal: " + idInput);
+                idReal = idInput;
+            } else {
+                System.out.println("Usando ID do Contexto (" + idInput + "): " + idReal);
+            }
+
+            produtoProcessado.put("idProduto", idReal);
+            produtoProcessado.put("quantidade", Integer.parseInt(row.get("quantidade")));
+
+            listaDeProdutos.add(produtoProcessado);
+        }
+
+        Map<String, Object> payloadFinal = new HashMap<>();
+        payloadFinal.put("produtos", listaDeProdutos);
+
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode jsonBody = mapper.valueToTree(payloadFinal);
+
+        System.out.println("Body Carrinho: " + jsonBody);
+
+        response = baseClient.post(jsonBody, endpoint);
+        context.setResponse(response);
+
+        System.out.println(response.getBody().asPrettyString());
+    }
+
     //Validações
 
     @Então("A resposta deve ser {int}")
@@ -128,7 +171,16 @@ public class CommonSteps {
 
     @E("O valor do campo {string} deve ser {string}")
     public void oValorDoCampoDeveSer(String campo, String valor) {
-        String campoEsperado = response.jsonPath().getString(campo);
-        assertEquals(valor, campoEsperado);
+        String valorRetornadoApi = context.getResponse().jsonPath().getString(campo);
+        Object valorNoContexto = TestContext.get(valor);
+        String valorParaComparar;
+
+        if(valorNoContexto != null){
+            valorParaComparar = valorNoContexto.toString();
+        }else{
+            valorParaComparar = valor;
+        }
+
+        assertEquals(valorParaComparar, valorRetornadoApi, "valores não são iguais!");
     }
 }
