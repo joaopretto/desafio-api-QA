@@ -1,7 +1,7 @@
 Feature: CarrinhoTeste
 
   Scenario: Gostaria de cadastrar um produto, adicionar em um carrinho, buscar o carrinho efetuar compra e excluir carrinho.
-      Given Armazeno o email "beltrano@qa25.com.br" e a senha "teste" dentro de uma variavel
+      Given Armazeno o email "beltrano@qa25MJV.com.br" e a senha "testeMJV" dentro de uma variavel
        When Faco uma requisicao do tipo POST no endpoint "/login" com usuario da variavel
        When Faco uma chamada na requisicao POST "/produtos" com o body
             | nome          | Mouse GPRO X Carrinho |
@@ -28,7 +28,7 @@ Feature: CarrinhoTeste
         And A mensagem do campo "message" deve ser "Registro excluído com sucesso"
 
   Scenario: Gostaria de cadastrar um carrinho com um produto não existente.
-      Given Armazeno o email "beltrano@qa25.com.br" e a senha "teste" dentro de uma variavel
+      Given Armazeno o email "beltrano@qa25MJV.com.br" e a senha "testeMJV" dentro de uma variavel
        When Faco uma requisicao do tipo POST no endpoint "/login" com usuario da variavel
        When Faco uma chamada na requisicao POST "/carrinhos" com o body de listagem de produtos
             | idProduto  | quantidade |

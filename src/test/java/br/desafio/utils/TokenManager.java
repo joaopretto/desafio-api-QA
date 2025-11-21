@@ -1,7 +1,6 @@
 package br.desafio.utils;
 
 import br.desafio.config.ApiConfig;
-import br.desafio.hooks.SetupHook;
 import io.restassured.response.Response;
 
 import static io.restassured.RestAssured.given;
